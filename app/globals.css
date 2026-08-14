@@ -104,3 +104,65 @@ body {
 .animate-fairy-float {
   animation: fairy-float 3.2s ease-in-out infinite;
 }
+
+/* Soft glowing halo pulse behind the Idol AI avatar */
+@keyframes fairy-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+.animate-fairy-glow {
+  animation: fairy-glow 2.8s ease-in-out infinite;
+}
+
+/* Twinkle used on decorative sparkles */
+@keyframes fairy-twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+.animate-fairy-twinkle {
+  animation: fairy-twinkle 2.4s ease-in-out infinite;
+}
+
+/* Chat panel entrance */
+@keyframes fairy-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-fairy-pop-in {
+  animation: fairy-pop-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Individual message reveal */
+@keyframes fairy-msg-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fairy-msg-in {
+  animation: fairy-msg-in 0.25s ease-out both;
+}
