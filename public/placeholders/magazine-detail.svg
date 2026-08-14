@@ -1,0 +1,23 @@
+<svg width="800" height="1000" viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Magazine placeholder image, Detail view">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E37BAF"/>
+      <stop offset="100%" stop-color="#A0C8F2"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect x="24" y="24" width="752" height="952" rx="28" fill="none" stroke="#FFFAFC" stroke-opacity="0.5" stroke-width="2"/>
+  <g transform="translate(400 460)">
+    <rect x="-90" y="-120" width="180" height="240" rx="10" fill="none" stroke="#FFFAFC" stroke-width="10"/>
+  <line x1="-60" y1="-70" x2="60" y2="-70" stroke="#FFFAFC" stroke-width="8"/>
+  <line x1="-60" y1="-30" x2="60" y2="-30" stroke="#FFFAFC" stroke-width="8"/>
+  <line x1="-60" y1="10" x2="20" y2="10" stroke="#FFFAFC" stroke-width="8"/>
+  </g>
+  <g transform="translate(64 64) scale(1.1)">
+    <path d="M0 -14 L4 -4 L14 -3 L6 4 L8 14 L0 8 L-8 14 L-6 4 L-14 -3 L-4 -4 Z" fill="#FFFAFC"/>
+  </g>
+  <text x="400" y="850" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B0B14">Magazine</text>
+  <text x="400" y="892" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" letter-spacing="3" fill="#0B0B14" opacity="0.55">IDOL FAIRIES PH</text>
+  <rect x="330" y="924" width="140" height="34" rx="17" fill="#0B0B14" opacity="0.85"/>
+  <text x="400" y="947" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#FFFAFC">Detail · Photo soon</text>
+</svg>

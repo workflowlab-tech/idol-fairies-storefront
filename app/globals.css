@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+:root {
+  /* Sampled directly from idol-fairies-logo.jpg (wing pink / star blue / bg near-black) */
+  --color-fairy-pink-50: #fff6fa;
+  --color-fairy-pink-100: #fde9f2;
+  --color-fairy-pink-200: #fad2e4;
+  --color-fairy-pink-300: #f5b8d6;
+  --color-fairy-pink-400: #ee9ac4;
+  --color-fairy-pink-500: #e37baf;
+  --color-fairy-pink-600: #c85e93;
+  --color-fairy-pink-700: #a34677;
+  --color-fairy-pink-800: #7a3059;
+  --color-fairy-pink-900: #4f1d39;
+
+  --color-fairy-blue-50: #f1f7fe;
+  --color-fairy-blue-100: #e1eefc;
+  --color-fairy-blue-200: #c3ddf8;
+  --color-fairy-blue-300: #a0c8f2;
+  --color-fairy-blue-400: #7db0ea;
+  --color-fairy-blue-500: #5a93dd;
+  --color-fairy-blue-600: #3f73be;
+  --color-fairy-blue-700: #2f5794;
+  --color-fairy-blue-800: #223d69;
+  --color-fairy-blue-900: #16263f;
+
+  --color-fairy-ink: #0b0b14;
+  --color-fairy-cream: #fffafc;
+  --color-fairy-cream-muted: #fcf0f6;
+  --color-fairy-gold: #d4a72c;
+  --color-fairy-danger: #d64545;
+
+  --background: var(--color-fairy-cream);
+  --foreground: var(--color-fairy-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-fairy-pink-50: var(--color-fairy-pink-50);
+  --color-fairy-pink-100: var(--color-fairy-pink-100);
+  --color-fairy-pink-200: var(--color-fairy-pink-200);
+  --color-fairy-pink-300: var(--color-fairy-pink-300);
+  --color-fairy-pink-400: var(--color-fairy-pink-400);
+  --color-fairy-pink-500: var(--color-fairy-pink-500);
+  --color-fairy-pink-600: var(--color-fairy-pink-600);
+  --color-fairy-pink-700: var(--color-fairy-pink-700);
+  --color-fairy-pink-800: var(--color-fairy-pink-800);
+  --color-fairy-pink-900: var(--color-fairy-pink-900);
+
+  --color-fairy-blue-50: var(--color-fairy-blue-50);
+  --color-fairy-blue-100: var(--color-fairy-blue-100);
+  --color-fairy-blue-200: var(--color-fairy-blue-200);
+  --color-fairy-blue-300: var(--color-fairy-blue-300);
+  --color-fairy-blue-400: var(--color-fairy-blue-400);
+  --color-fairy-blue-500: var(--color-fairy-blue-500);
+  --color-fairy-blue-600: var(--color-fairy-blue-600);
+  --color-fairy-blue-700: var(--color-fairy-blue-700);
+  --color-fairy-blue-800: var(--color-fairy-blue-800);
+  --color-fairy-blue-900: var(--color-fairy-blue-900);
+
+  --color-fairy-ink: var(--color-fairy-ink);
+  --color-fairy-cream: var(--color-fairy-cream);
+  --color-fairy-cream-muted: var(--color-fairy-cream-muted);
+  --color-fairy-gold: var(--color-fairy-gold);
+  --color-fairy-danger: var(--color-fairy-danger);
+
+  --font-sans: var(--font-poppins);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Horizontal scroll-snap slideshow used on the homepage new-releases strip */
+.snap-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-row::-webkit-scrollbar {
+  display: none;
+}
+.snap-row > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+@keyframes fairy-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.animate-fairy-float {
+  animation: fairy-float 3.2s ease-in-out infinite;
+}
