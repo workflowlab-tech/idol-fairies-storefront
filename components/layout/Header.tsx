@@ -6,14 +6,12 @@ import { useState } from "react";
 import { useCart } from "@/lib/cart/context";
 
 const NAV_LINKS = [
+  { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
   { href: "/albums", label: "Albums" },
   { href: "/light-sticks", label: "Light Sticks" },
   { href: "/photobooks", label: "Photobooks & Mags" },
-  { href: "/new-releases", label: "New Releases" },
-  { href: "/preorders", label: "Preorders" },
-  { href: "/sold-out", label: "Sold Out" },
-  { href: "/faq", label: "FAQ" },
+  { href: "/shop?category=Collectable", label: "Collectibles" },
   { href: "/about", label: "About" },
 ];
 
@@ -24,16 +22,16 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-fairy-pink-100 bg-fairy-cream/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-3" aria-label="Idol Fairies PH home">
+        <Link href="/" className="flex items-center gap-3" aria-label="Idol Fairies home">
           <span className="relative block h-11 w-11 shrink-0 overflow-hidden rounded-2xl bg-fairy-ink shadow-sm">
-            <Image src="/idol-fairies-logo.jpg" alt="Idol Fairies PH" fill sizes="44px" className="object-cover" />
+            <Image src="/idol-fairies-logo.jpg" alt="Idol Fairies" fill sizes="44px" className="object-cover" />
           </span>
           <span className="hidden flex-col leading-tight sm:flex">
             <span className="font-extrabold tracking-tight text-fairy-ink">
               Idol<span className="text-fairy-pink-500">Fairies</span>
             </span>
             <span className="text-[11px] font-medium uppercase tracking-widest text-fairy-blue-600">
-              K-pop Store PH
+              K-pop Store
             </span>
           </span>
         </Link>

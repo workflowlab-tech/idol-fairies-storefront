@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
+import type { Product } from "@/types/product";
+import FeaturedCarousel from "./FeaturedCarousel";
 
-export default function Hero() {
+export default function Hero({ products }: { products: Product[] }) {
   return (
     <section className="relative overflow-hidden bg-fairy-ink">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(227,123,175,0.35),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(90,147,221,0.35),transparent_45%)]" />
@@ -21,22 +21,22 @@ export default function Hero() {
             language.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
-            <Link
-              href="/shop"
+            <a
+              href="#featured"
               className="rounded-full bg-fairy-pink-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-fairy-pink-400"
             >
-              Shop All Products
-            </Link>
-            <Link
-              href="/new-releases"
+              Shop Featured
+            </a>
+            <a
+              href="/shop"
               className="rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              New Releases
-            </Link>
+              View All
+            </a>
           </div>
         </div>
-        <div className="relative h-56 w-56 shrink-0 sm:h-72 sm:w-72">
-          <Image src="/idol-ai-robot.png" alt="Idol AI robot mascot" fill sizes="288px" className="object-contain animate-fairy-float" priority />
+        <div className="w-full flex-1 lg:w-auto">
+          <FeaturedCarousel products={products} />
         </div>
       </div>
     </section>

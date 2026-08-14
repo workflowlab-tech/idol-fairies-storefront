@@ -1,31 +1,31 @@
 ---
-title: Returns & Refunds
 category: returns
+title: Returns and Refunds
 ---
 
-## What can be returned
+## Can I return an item?
 
-Most items we sell (albums, photobooks, light sticks, magazines) are
-collectible merchandise sold as new/sealed. Because of this, we only accept
-returns for items that arrive damaged, defective, or incorrect — not for
-change-of-mind once an item has been opened. Report a damaged, defective,
-or incorrect item within 7 days of delivery.
+Return eligibility depends on the product, its condition, the reason for
+the return, and the applicable store policy. Contact the store with the
+order details before returning anything.
 
-## How to start a return
+## Should I send an item back immediately?
 
-Contact us within the 7-day window with your order details and photos
-showing the issue (damage, defect, or the incorrect item received). Keep
-the original packaging until the claim is resolved, since couriers
-sometimes require it for their own investigation.
+No. Contact the store first and wait for return instructions.
 
-## Refund processing
+## Are refunds automatic?
 
-Approved refunds are issued back to your original payment method. Once we
-confirm the return, refunds typically take 5–10 business days to reflect,
-depending on your bank or e-wallet provider's own processing time.
+No. Refund eligibility must first be determined based on the order and
+circumstances.
 
-## Replacement vs. refund
+## How long do refunds take?
 
-For damaged or incorrect items, we offer a replacement first if the same
-item is back in stock; if it isn't, we offer a refund instead. You can also
-request a refund directly instead of a replacement if you prefer.
+Processing time may depend on the payment method and payment provider.
+Idol AI should not guarantee a specific refund completion date unless
+one is explicitly provided for the order.
+
+## Can opened merchandise be returned?
+
+Eligibility may depend on the product and circumstances. Customers
+should contact the store for assessment rather than assuming an opened
+item is returnable.

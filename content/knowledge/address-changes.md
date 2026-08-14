@@ -1,23 +1,18 @@
 ---
-title: Address Changes
 category: address-changes
+title: Address Changes
 ---
 
-## Changing your delivery address
+## Can I change my shipping address?
 
-You can change your delivery address any time before the order is handed to
-the courier. Contact us with your order details and the corrected address
-as soon as possible.
+Contact the store as soon as possible if an address change is required.
 
-## After dispatch
+## Is an address change guaranteed?
 
-Once an order is out for dispatch, we can no longer redirect it ourselves.
-At that point you would need to coordinate directly with the courier (many
-allow address corrections mid-transit for a fee), or receive the parcel at
-the original address and arrange a reship separately.
+No. Once an order has entered processing, fulfillment, or shipment,
+changing the delivery address may no longer be possible.
 
-## Typos in your address
+## What if I entered the wrong address?
 
-Double-check your barangay, city, and ZIP code when ordering — an incorrect
-address can delay delivery or cause a failed delivery attempt, which may
-require you to cover a reshipping fee.
+Contact the store immediately with the order information and correct
+address. Do not assume the address can still be changed after dispatch.

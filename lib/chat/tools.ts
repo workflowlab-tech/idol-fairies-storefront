@@ -32,7 +32,7 @@ export const CHAT_TOOLS: FunctionDeclaration[] = [
   {
     name: "search_products",
     description:
-      "Look up real products from the Idol Fairies PH catalog by exact filters (artist, category, availability, price range, or a name/keyword search). Use this for ANY question about what's in stock, prices, preorder status, sold-out status, or release dates. Never answer those questions from memory.",
+      "Look up real products from the Idol Fairies catalog by exact filters (artist, category, availability, price range, or a name/keyword search). Use this for ANY question about what's in stock, prices, preorder status, sold-out status, or release dates. Never answer those questions from memory.",
     parametersJsonSchema: {
       type: "object",
       properties: {
@@ -53,7 +53,7 @@ export const CHAT_TOOLS: FunctionDeclaration[] = [
   {
     name: "search_policy",
     description:
-      "Search the Idol Fairies PH policy knowledge base (shipping, preorder rules, cancellation, returns/refunds, damaged or missing items, payment, address changes, customs, general FAQs). Use this for ANY question about store policy or procedures. Never answer those questions from memory — only from what this tool returns.",
+      "Search the Idol Fairies policy knowledge base (shipping, preorder rules, cancellation, returns/refunds, damaged or missing items, payment, address changes, customs, general FAQs). Use this for ANY question about store policy or procedures. Never answer those questions from memory — only from what this tool returns.",
     parametersJsonSchema: {
       type: "object",
       properties: {

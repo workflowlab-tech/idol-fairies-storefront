@@ -6,13 +6,13 @@ const SHOP_LINKS = [
   { href: "/albums", label: "Albums" },
   { href: "/light-sticks", label: "Light Sticks" },
   { href: "/photobooks", label: "Photobooks & Magazines" },
-  { href: "/preorders", label: "Preorders" },
+  { href: "/shop?category=Collectable", label: "Collectibles" },
 ];
 
 const HELP_LINKS = [
   { href: "/faq", label: "FAQ" },
   { href: "/about", label: "About / Why Idol Fairies" },
-  { href: "/faq#shipping", label: "Shipping (PH)" },
+  { href: "/faq#shipping", label: "Shipping" },
   { href: "/faq#returns", label: "Returns & Refunds" },
 ];
 
@@ -23,15 +23,14 @@ export default function Footer() {
         <div>
           <Link href="/" className="flex items-center gap-3">
             <span className="relative block h-11 w-11 overflow-hidden rounded-2xl bg-white/5">
-              <Image src="/idol-fairies-logo.jpg" alt="Idol Fairies PH" fill sizes="44px" className="object-cover" />
+              <Image src="/idol-fairies-logo.jpg" alt="Idol Fairies" fill sizes="44px" className="object-cover" />
             </span>
             <span className="font-extrabold tracking-tight">
-              Idol<span className="text-fairy-pink-300">Fairies</span> PH
+              Idol<span className="text-fairy-pink-300">Fairies</span>
             </span>
           </Link>
           <p className="mt-3 max-w-xs text-sm text-fairy-cream/70">
-            A modern K-pop e-commerce storefront for albums, light sticks, photobooks, and magazines — shipped from
-            the Philippines.
+            Your K-pop destination for albums, light sticks, photobooks, collectibles, and more.
           </p>
         </div>
 
@@ -64,13 +63,12 @@ export default function Footer() {
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-fairy-cream/60">Idol AI</h3>
           <p className="mt-3 text-sm text-fairy-cream/80">
-            Have a question about an album, a preorder, or shipping? Tap the floating Idol AI button anywhere on the
-            site — it answers in your language.
+            Need help finding a product or have a question about preorders, shipping, or store policies? Ask Idol AI anytime — it can help in your language.
           </p>
         </div>
       </div>
       <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-fairy-cream/50 sm:px-6">
-        Idol Fairies PH is a demo K-pop storefront portfolio project. Product data sourced for catalog reference only.
+        © 2026 Idol Fairies. All rights reserved.
       </div>
     </footer>
   );

@@ -12,7 +12,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
   return (
     <CategoryPageLayout
       title="Shop All Products"
-      description="Browse the full Idol Fairies PH catalog — albums, light sticks, photobooks, magazines, and collectables."
+      description="Browse the full Idol Fairies catalog — albums, light sticks, photobooks, magazines, and collectibles."
       products={products}
     />
   );

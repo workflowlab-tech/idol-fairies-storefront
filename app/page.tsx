@@ -3,10 +3,11 @@ import CategoryGrid from "@/components/home/CategoryGrid";
 import ProductSlideshow from "@/components/home/ProductSlideshow";
 import WhyShop from "@/components/home/WhyShop";
 import FaqPreview from "@/components/home/FaqPreview";
-import { getNewReleases, getFeaturedProducts, getBestsellers, getPreorders } from "@/lib/products/queries";
+import { getHeroCarouselProducts, getNewReleases, getFeaturedProducts, getBestsellers, getPreorders } from "@/lib/products/queries";
 
 export default async function HomePage() {
-  const [newReleases, featured, bestsellers, preorders] = await Promise.all([
+  const [heroProducts, newReleases, featured, bestsellers, preorders] = await Promise.all([
+    getHeroCarouselProducts(8),
     getNewReleases(12),
     getFeaturedProducts(12),
     getBestsellers(12),
@@ -15,7 +16,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      <Hero products={heroProducts} />
       <CategoryGrid />
       <ProductSlideshow
         title="New Releases"

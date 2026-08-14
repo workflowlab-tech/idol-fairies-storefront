@@ -1,4 +1,4 @@
-# Idol Fairies PH v2
+# Idol Fairies v2
 
 A modern K-pop e-commerce storefront (Next.js + TypeScript + Supabase) with
 a hybrid Gemini-powered chatbot: structured product lookups against a live

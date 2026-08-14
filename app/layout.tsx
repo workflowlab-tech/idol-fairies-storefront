@@ -16,11 +16,11 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
-    default: "Idol Fairies PH — K-pop Albums, Light Sticks & Merch",
-    template: "%s · Idol Fairies PH",
+    default: "Idol Fairies — K-pop Albums, Light Sticks & Merch",
+    template: "%s · Idol Fairies",
   },
   description:
-    "Idol Fairies PH is a modern K-pop e-commerce storefront for albums, light sticks, photobooks, and magazines, with Idol AI to help you shop.",
+    "Idol Fairies is your K-pop destination for albums, light sticks, photobooks, collectibles, and more, with Idol AI to help you shop.",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

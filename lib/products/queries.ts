@@ -70,12 +70,52 @@ export async function getBestsellers(limit = 8): Promise<Product[]> {
 }
 
 export async function getNewReleases(limit = 12): Promise<Product[]> {
-  return getAllProducts().then((all) => all.filter((p) => p.newRelease).slice(0, limit));
+  return getAllProducts().then((all) => {
+    // Filter for new releases
+    const newReleases = all.filter((p) => p.newRelease);
+    
+    // Sort by availability priority: In Stock > Preorder > Sold Out
+    const sorted = newReleases.sort((a, b) => {
+      const statusOrder = { "In Stock": 0, "Preorder": 1, "Sold Out": 2 };
+      const aOrder = statusOrder[a.stockStatus as keyof typeof statusOrder] ?? 3;
+      const bOrder = statusOrder[b.stockStatus as keyof typeof statusOrder] ?? 3;
+      if (aOrder !== bOrder) return aOrder - bOrder;
+      // Within same status, preserve release_date order (newest first)
+      return 0;
+    });
+    
+    return sorted.slice(0, limit);
+  });
 }
 
 export async function getPreorders(limit?: number): Promise<Product[]> {
   const all = await getAllProducts({ availability: "Preorder" });
   return limit ? all.slice(0, limit) : all;
+}
+
+export async function getHeroCarouselProducts(limit = 8): Promise<Product[]> {
+  const all = await getAllProducts();
+  
+  // Separate by availability priority: In Stock > Preorder > Sold Out
+  const inStock = all.filter((p) => p.stockStatus === "In Stock");
+  const preorder = all.filter((p) => p.stockStatus === "Preorder");
+  const soldOut = all.filter((p) => p.stockStatus === "Sold Out");
+  
+  // Sort each group by priority: bestseller > featured > newRelease
+  const prioritySort = (a: Product, b: Product) => {
+    if (a.bestseller !== b.bestseller) return b.bestseller ? 1 : -1;
+    if (a.featured !== b.featured) return b.featured ? 1 : -1;
+    if (a.newRelease !== b.newRelease) return b.newRelease ? 1 : -1;
+    return 0;
+  };
+  
+  const inStockSorted = inStock.sort(prioritySort);
+  const preorderSorted = preorder.sort(prioritySort);
+  const soldOutSorted = soldOut.sort(prioritySort);
+  
+  // Combine in priority order: In Stock > Preorder > Sold Out
+  const result = [...inStockSorted, ...preorderSorted, ...soldOutSorted].slice(0, limit);
+  return result.length > 0 ? result : [];
 }
 
 export async function getSoldOut(limit?: number): Promise<Product[]> {

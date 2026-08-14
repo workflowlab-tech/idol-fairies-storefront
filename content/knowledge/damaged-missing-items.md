@@ -1,25 +1,25 @@
 ---
-title: Damaged or Missing Items
 category: damaged-missing
+title: Damaged or Missing Items
 ---
 
-## My order arrived damaged
+## My order arrived damaged. What should I do?
 
-Contact us within 7 days of delivery with photos of both the damaged item
-and its packaging. We'll arrange a replacement if the item is still in
-stock, or a refund if it isn't. Please hold on to the packaging until the
-claim is resolved — couriers sometimes need it for their own investigation
-into what happened in transit.
+Contact the store as soon as reasonably possible and provide the order
+information together with clear photos or other relevant evidence of the
+issue.
 
-## An item is missing from my order
+## An item is missing from my order. What should I do?
 
-Check what arrived against your order confirmation, then contact us with
-your order details. We'll verify against our own packing record and either
-ship the missing item or refund it — whichever you'd prefer.
+Contact the store with the order details and identify the missing item.
 
-## Wrong item received
+## Is damaged outer packaging automatically eligible for compensation?
 
-If you received a different product or version than what you ordered,
-contact us with your order details and a photo of what arrived. This is
-handled the same way as a damaged item: replacement if available, refund if
-not.
+Not necessarily. The actual product condition and circumstances should
+be reviewed before a resolution is determined.
+
+## What resolution will I receive?
+
+The appropriate resolution depends on the verified issue and
+circumstances. Idol AI should not promise a refund, replacement, or
+other compensation before the issue has been reviewed.

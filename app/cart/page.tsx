@@ -81,7 +81,7 @@ export default function CartPage() {
 
       <button
         disabled
-        title="Checkout isn't wired up yet — this is a portfolio storefront demo."
+        title="Checkout coming soon."
         className="mt-4 w-full cursor-not-allowed rounded-full bg-fairy-ink/10 px-6 py-3 text-sm font-semibold text-fairy-ink/40"
       >
         Checkout (coming soon)

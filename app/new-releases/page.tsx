@@ -10,7 +10,7 @@ export default async function NewReleasesPage() {
   return (
     <CategoryPageLayout
       title="New Releases"
-      description="Everything freshly added to the Idol Fairies PH catalog."
+      description="Everything freshly added to the Idol Fairies catalog."
       products={products}
       emptyMessage="No new releases flagged right now — check back soon."
     />
