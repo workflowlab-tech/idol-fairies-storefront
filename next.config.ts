@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
         hostname: "media.ktown4u.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "kplaceshop.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+        pathname: "/**",
+      },
     ],
   },
 };
