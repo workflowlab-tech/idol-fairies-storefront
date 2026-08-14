@@ -105,6 +105,27 @@ body {
   animation: fairy-float 3.2s ease-in-out infinite;
 }
 
+@keyframes chatbot-mascot-jump {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-14px);
+  }
+  65% {
+    transform: translateY(-4px);
+  }
+}
+
+.chatbot-mascot-button {
+  animation: fairy-float 3.2s ease-in-out infinite;
+}
+
+.chatbot-mascot-button:hover {
+  animation: chatbot-mascot-jump 680ms ease-in-out infinite;
+}
+
 @keyframes chatbot-robot-enter {
   from {
     opacity: 0;
@@ -171,6 +192,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .chatbot-mascot-button,
+  .chatbot-mascot-button:hover,
   .chatbot-robot-image {
     animation: none;
     will-change: auto;

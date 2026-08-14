@@ -28,6 +28,8 @@ const ROBOT_IMAGES: Record<RobotState, string> = {
   success: "/chatbot/idol-ai-success.webp",
 };
 
+const AMBIENT_ROBOT_STATES: RobotState[] = ["idle", "thinking", "searching", "success"];
+
 function RobotImage({
   state,
   alt,
@@ -81,9 +83,9 @@ export default function ChatWidget({ products }: { products: Product[] }) {
   const [loading, setLoading] = useState(false);
   const [productContext, setProductContext] = useState<string>();
   const [showBubble, setShowBubble] = useState(false);
-  const [hoverMascot, setHoverMascot] = useState(false);
   const [bubbleIndex, setBubbleIndex] = useState(0);
   const [robotState, setRobotState] = useState<RobotState>("idle");
+  const [ambientRobotState, setAmbientRobotState] = useState<RobotState>("idle");
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -99,6 +101,17 @@ export default function ChatWidget({ products }: { products: Product[] }) {
       if (searchingTimeoutRef.current) clearTimeout(searchingTimeoutRef.current);
       if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
     };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAmbientRobotState((current) => {
+        const currentIndex = AMBIENT_ROBOT_STATES.indexOf(current);
+        return AMBIENT_ROBOT_STATES[(currentIndex + 1) % AMBIENT_ROBOT_STATES.length];
+      });
+    }, 2600);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Speech bubble timing: show after 2 seconds, hide after 6 seconds
@@ -226,10 +239,6 @@ export default function ChatWidget({ products }: { products: Product[] }) {
     event.preventDefault();
     void send(input);
   }
-
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   return (
     <>
@@ -430,20 +439,17 @@ export default function ChatWidget({ products }: { products: Product[] }) {
 
           <button
             onClick={() => setOpen(true)}
-            onMouseEnter={() => setHoverMascot(true)}
-            onMouseLeave={() => setHoverMascot(false)}
             aria-label="Open Idol AI assistant"
             aria-expanded={open}
-            className={`flex items-center justify-center transition-all drop-shadow-lg ${
-              hoverMascot ? "scale-110" : "scale-100"
-            } ${
-              prefersReducedMotion
-                ? ""
-                : "animate-fairy-float"
-            }`}
+            className="chatbot-mascot-button flex items-center justify-center drop-shadow-lg"
           >
             <span className="relative block h-24 w-24 md:h-40 md:w-40">
-              <RobotImage state="idle" alt="Idol AI" sizes="(min-width: 768px) 160px, 96px" priority />
+              <RobotImage
+                state={ambientRobotState}
+                alt="Idol AI"
+                sizes="(min-width: 768px) 160px, 96px"
+                priority={ambientRobotState === "idle"}
+              />
             </span>
           </button>
         </div>
