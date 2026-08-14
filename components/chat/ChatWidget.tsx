@@ -19,6 +19,39 @@ type Message = {
   productSlugs?: string[];
 };
 
+type RobotState = "idle" | "thinking" | "searching" | "success";
+
+const ROBOT_IMAGES: Record<RobotState, string> = {
+  idle: "/chatbot/idol-ai-idle.webp",
+  thinking: "/chatbot/idol-ai-thinking.webp",
+  searching: "/chatbot/idol-ai-searching.webp",
+  success: "/chatbot/idol-ai-success.webp",
+};
+
+function RobotImage({
+  state,
+  alt,
+  sizes,
+  priority = false,
+}: {
+  state: RobotState;
+  alt: string;
+  sizes: string;
+  priority?: boolean;
+}) {
+  return (
+    <Image
+      key={state}
+      src={ROBOT_IMAGES[state]}
+      alt={alt}
+      fill
+      sizes={sizes}
+      className={`chatbot-robot-image chatbot-robot-${state} object-contain`}
+      priority={priority}
+    />
+  );
+}
+
 const WELCOME: Message = {
   id: 1,
   role: "assistant",
@@ -50,6 +83,7 @@ export default function ChatWidget({ products }: { products: Product[] }) {
   const [showBubble, setShowBubble] = useState(false);
   const [hoverMascot, setHoverMascot] = useState(false);
   const [bubbleIndex, setBubbleIndex] = useState(0);
+  const [robotState, setRobotState] = useState<RobotState>("idle");
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,6 +91,15 @@ export default function ChatWidget({ products }: { products: Product[] }) {
   // TypeScript/React fix:
   // useRef requires an initial value with the current project typings.
   const bubbleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (searchingTimeoutRef.current) clearTimeout(searchingTimeoutRef.current);
+      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+    };
+  }, []);
 
   // Speech bubble timing: show after 2 seconds, hide after 6 seconds
   useEffect(() => {
@@ -98,6 +141,7 @@ export default function ChatWidget({ products }: { products: Product[] }) {
       }>;
 
       setProductContext(custom.detail?.productContext);
+      setRobotState("idle");
       setOpen(true);
 
       setTimeout(() => {
@@ -143,12 +187,23 @@ export default function ChatWidget({ products }: { products: Product[] }) {
 
     setInput("");
     setLoading(true);
+    if (searchingTimeoutRef.current) clearTimeout(searchingTimeoutRef.current);
+    if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+    setRobotState("thinking");
+    searchingTimeoutRef.current = setTimeout(() => {
+      setRobotState("searching");
+    }, 650);
 
     const reply = await sendChatMessage(
       clean,
       productContext,
       history
     );
+
+    if (searchingTimeoutRef.current) {
+      clearTimeout(searchingTimeoutRef.current);
+      searchingTimeoutRef.current = null;
+    }
 
     setMessages((current) => [
       ...current,
@@ -160,6 +215,11 @@ export default function ChatWidget({ products }: { products: Product[] }) {
     ]);
 
     setLoading(false);
+    setRobotState("success");
+    successTimeoutRef.current = setTimeout(() => {
+      setRobotState("idle");
+      successTimeoutRef.current = null;
+    }, 1600);
   }
 
   function submit(event: FormEvent) {
@@ -181,13 +241,14 @@ export default function ChatWidget({ products }: { products: Product[] }) {
         >
           <header className="flex items-center gap-3 bg-fairy-ink px-4 py-3 text-fairy-cream">
             <span className="relative block h-10 w-10 shrink-0">
-              <Image
-                src="/idol-ai-robot.png"
-                alt=""
-                fill
-                sizes="40px"
-                className="object-contain"
-              />
+              <RobotImage state={robotState} alt="" sizes="40px" />
+            </span>
+
+            <span className="sr-only" aria-live="polite">
+              {robotState === "idle" && "Idol AI is ready"}
+              {robotState === "thinking" && "Idol AI is thinking"}
+              {robotState === "searching" && "Idol AI is searching and typing"}
+              {robotState === "success" && "Idol AI found a response"}
             </span>
 
             <div className="min-w-0 flex-1">
@@ -382,14 +443,7 @@ export default function ChatWidget({ products }: { products: Product[] }) {
             }`}
           >
             <span className="relative block h-24 w-24 md:h-40 md:w-40">
-              <Image
-                src="/idol-ai-robot.png"
-                alt="Idol AI"
-                fill
-                sizes="160px"
-                className="object-contain"
-                priority
-              />
+              <RobotImage state="idle" alt="Idol AI" sizes="(min-width: 768px) 160px, 96px" priority />
             </span>
           </button>
         </div>
