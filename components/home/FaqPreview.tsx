@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { faqGroups } from "@/data/faq";
+import { faqGroups } from "@/lib/faq/knowledge";
 
 export default function FaqPreview() {
   const preview = faqGroups.flatMap((group) => group.items).slice(0, 4);

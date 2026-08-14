@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { FaqGroup } from "@/data/faq";
+import type { FaqGroup } from "@/types/faq";
 
 export default function FaqAccordion({ groups }: { groups: FaqGroup[] }) {
   const [openId, setOpenId] = useState<string | null>(groups[0]?.items[0]?.id ?? null);

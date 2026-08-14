@@ -1,9 +1,18 @@
 const POINTS = [
   { title: "Live catalog", body: "Stock, price, and preorder status come straight from our database — never guessed." },
-  { title: "Guaranteed authentic", body: "Every item is guaranteed authentic and sourced directly from Korea." },
+  {
+    title: "Official product sourcing",
+    body: "Products listed as official merchandise are sourced from established K-pop suppliers and retailers.",
+  },
   { title: "Idol AI on standby", body: "Ask about products or store policy anytime, in your own language." },
-  { title: "Nationwide PH shipping", body: "Ships from the Philippines to Philippine addresses only — no overseas shipping, no customs surprises." },
-  { title: "Fair preorder policy", body: "Preorders ship at least 20 days after the item's release in Korea — no guessing games." },
+  {
+    title: "Current shipping options",
+    body: "Available destinations, delivery methods, and charges are confirmed through the store's current checkout options.",
+  },
+  {
+    title: "Clear preorder details",
+    body: "Timing depends on release, supplier availability, arrival, and processing. Check each product for current details.",
+  },
 ];
 
 export default function WhyShop() {

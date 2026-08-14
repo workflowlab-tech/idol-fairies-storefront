@@ -16,9 +16,9 @@ export default function Hero({ products }: { products: Product[] }) {
             <span className="text-fairy-pink-300">wherever you are.</span>
           </h1>
           <p className="mx-auto mt-4 max-w-md text-sm text-fairy-cream/70 lg:mx-0">
-            Guaranteed authentic, straight from Korea — shipped nationwide across the Philippines. Real stock, real
-            prices, no guesswork, and Idol AI on standby for preorder, shipping, and policy questions in your
-            language.
+            Browse albums, light sticks, photobooks, magazines, collectibles, and other official merchandise. Check
+            current availability and shipping options on the storefront, with Idol AI on standby for product and
+            policy questions in your language.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
             <a
