@@ -1,6 +1,15 @@
 import { supabase } from "@/lib/supabase/client";
 import type { Product, ProductCategory, ProductFilters, ProductRow, StockStatus } from "@/types/product";
 
+/**
+ * When Supabase env vars are absent (e.g. a preview without backend access),
+ * the storefront degrades to an empty catalog instead of crashing. Behavior is
+ * unchanged whenever Supabase is configured.
+ */
+const SUPABASE_CONFIGURED = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+);
+
 /** How the DB's `category` values map onto the storefront's nav groupings. */
 export const CATEGORY_GROUPS: Record<string, ProductCategory[]> = {
   albums: ["Album"],
@@ -33,6 +42,8 @@ function mapRow(row: ProductRow): Product {
 }
 
 export async function getAllProducts(filters: ProductFilters = {}): Promise<Product[]> {
+  if (!SUPABASE_CONFIGURED) return [];
+
   let query = supabase.from("products").select("*");
 
   if (filters.artist) query = query.ilike("artist", `%${filters.artist}%`);
@@ -56,6 +67,8 @@ export async function getAllProducts(filters: ProductFilters = {}): Promise<Prod
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
+  if (!SUPABASE_CONFIGURED) return null;
+
   const { data, error } = await supabase.from("products").select("*").eq("slug", slug).maybeSingle();
   if (error) throw new Error(`Failed to load product "${slug}": ${error.message}`);
   return data ? mapRow(data as ProductRow) : null;
