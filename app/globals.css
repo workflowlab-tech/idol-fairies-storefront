@@ -75,6 +75,29 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 9999px;
+  background: var(--color-fairy-ink);
+  color: white;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-fairy-blue-500);
+  outline-offset: 3px;
+}
+
 /* Horizontal scroll-snap slideshow used on the homepage new-releases strip */
 .snap-row {
   display: flex;
@@ -124,6 +147,18 @@ body {
 
 .chatbot-mascot-button:hover {
   animation: chatbot-mascot-jump 680ms ease-in-out infinite;
+}
+
+.chatbot-launcher-position {
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 640px) {
+  .chatbot-launcher-position {
+    right: 1rem;
+    bottom: 1rem;
+  }
 }
 
 @keyframes chatbot-robot-enter {

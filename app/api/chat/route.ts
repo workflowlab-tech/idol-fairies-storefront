@@ -2,7 +2,13 @@ import { GoogleGenAI, type Content } from "@google/genai";
 import { NextResponse, type NextRequest } from "next/server";
 import { CHAT_TOOLS, executeTool, type ProductToolResult } from "@/lib/chat/tools";
 import { SYSTEM_PROMPT } from "@/lib/chat/systemPrompt";
-import { MAX_HISTORY_MESSAGES, MAX_MESSAGE_LENGTH, type ChatHistoryMessage, type ChatReply } from "@/types/chat";
+import {
+  MAX_HISTORY_MESSAGES,
+  MAX_MESSAGE_LENGTH,
+  type ChatHistoryMessage,
+  type ChatProductSummary,
+  type ChatReply,
+} from "@/types/chat";
 
 // Calls Gemini + Supabase directly — must run in the Node.js runtime, never
 // statically cached.
@@ -95,7 +101,7 @@ export async function POST(request: NextRequest) {
       },
     ];
 
-    const productSlugs = new Set<string>();
+    const productResults = new Map<string, ChatProductSummary>();
     let finalText = "";
 
     // Gemini may chain several tool calls in one turn (e.g. try search_policy,
@@ -127,7 +133,15 @@ export async function POST(request: NextRequest) {
         if (!call.name) continue;
         const result = await executeTool(call.name, call.args ?? {});
         if (call.name === "search_products") {
-          for (const product of (result as ProductToolResult).products) productSlugs.add(product.slug);
+          for (const product of (result as ProductToolResult).products) {
+            productResults.set(product.slug, {
+              slug: product.slug,
+              artist: product.artist,
+              productName: product.productName,
+              pricePHP: product.priceValuePHP,
+              stockStatus: product.stockStatus,
+            });
+          }
         }
         responseParts.push({ functionResponse: { name: call.name, response: result as Record<string, unknown> } });
       }
@@ -152,7 +166,7 @@ export async function POST(request: NextRequest) {
 
     const payload: ChatReply = {
       text: finalText ? finalText.slice(0, MAX_REPLY_LENGTH) : FALLBACK_TEXT,
-      ...(productSlugs.size > 0 ? { productSlugs: [...productSlugs].slice(0, 6) } : {}),
+      ...(productResults.size > 0 ? { products: [...productResults.values()].slice(0, 6) } : {}),
     };
     return NextResponse.json(payload);
   } catch (error) {

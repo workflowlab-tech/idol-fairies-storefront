@@ -5,7 +5,6 @@ import { CartProvider } from "@/lib/cart/context";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ChatWidget from "@/components/chat/ChatWidget";
-import { getAllProducts } from "@/lib/products/queries";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -23,19 +22,16 @@ export const metadata: Metadata = {
     "Idol Fairies is your K-pop destination for albums, light sticks, photobooks, collectibles, and more, with Idol AI to help you shop.",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  // Fetched once here (not per-page) so the chat widget can resolve product
-  // cards for slugs Idol AI returns without a second round-trip.
-  const products = await getAllProducts().catch(() => []);
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-fairy-cream text-fairy-ink">
         <CartProvider>
+          <a href="#main-content" className="skip-link">Skip to content</a>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
           <Footer />
-          <ChatWidget products={products} />
+          <ChatWidget />
         </CartProvider>
       </body>
     </html>

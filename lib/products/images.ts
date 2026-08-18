@@ -27,6 +27,12 @@ function placeholderImages(category: ProductCategory): string[] {
   return PLACEHOLDER_VARIANTS.map((variant) => `/placeholders/${slug}-${variant}.svg`);
 }
 
+/** Honest branded fallback used when a stored image URL fails at render time. */
+export function getProductPlaceholderImage(category: ProductCategory, index = 0): string {
+  const images = placeholderImages(category);
+  return images[Math.min(Math.max(index, 0), images.length - 1)];
+}
+
 function publicUrl(path: string): string {
   return supabase.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
 }
@@ -45,7 +51,9 @@ export function getProductPrimaryImage(product: Pick<Product, "imageUrl" | "cate
 export async function getProductGalleryImages(
   product: Pick<Product, "imageUrl" | "category" | "slug">
 ): Promise<string[]> {
-  if (!product.imageUrl) return placeholderImages(product.category);
+  // A placeholder is not a verified multi-image gallery. Show only one so
+  // shoppers never see decorative thumbnails presented as product photos.
+  if (!product.imageUrl) return [getProductPlaceholderImage(product.category)];
   if (!product.imageUrl.includes(`/storage/v1/object/public/${STORAGE_BUCKET}/`)) {
     // Real image but not one of ours (shouldn't happen today, but don't
     // break if a URL is ever set some other way) — just show it alone.

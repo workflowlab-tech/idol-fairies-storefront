@@ -1,4 +1,4 @@
-import type { ChatHistoryMessage, ChatReply } from "@/types/chat";
+import type { ChatHistoryMessage, ChatProductSummary, ChatReply } from "@/types/chat";
 
 const FALLBACK_TEXT = "Idol AI is temporarily unavailable. Please try again in a moment.";
 
@@ -23,11 +23,23 @@ export async function sendChatMessage(
 
     const data: unknown = await response.json();
     if (typeof data === "object" && data !== null && "text" in data && typeof (data as { text: unknown }).text === "string") {
-      const productSlugs = (data as { productSlugs?: unknown }).productSlugs;
+      const products = (data as { products?: unknown }).products;
       return {
         text: (data as { text: string }).text,
-        ...(Array.isArray(productSlugs)
-          ? { productSlugs: productSlugs.filter((slug): slug is string => typeof slug === "string") }
+        ...(Array.isArray(products)
+          ? {
+              products: products.filter((product): product is ChatProductSummary => {
+                if (typeof product !== "object" || product === null) return false;
+                const item = product as Record<string, unknown>;
+                return (
+                  typeof item.slug === "string" &&
+                  typeof item.artist === "string" &&
+                  typeof item.productName === "string" &&
+                  typeof item.pricePHP === "number" &&
+                  typeof item.stockStatus === "string"
+                );
+              }),
+            }
           : {}),
       };
     }

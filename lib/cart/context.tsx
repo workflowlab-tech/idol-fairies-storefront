@@ -80,6 +80,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
             productName: product.productName,
             artist: product.artist,
             version: product.version,
+            category: product.category,
+            imageUrl: product.imageUrl,
             pricePHP: product.pricePHP,
             quantity,
           },
