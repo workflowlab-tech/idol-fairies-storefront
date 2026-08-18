@@ -6,8 +6,8 @@ title: Idol AI
 ## What can Idol AI help with?
 
 Idol AI can help customers find products and answer questions about
-product availability, preorders, shipping, orders, returns, and other
-documented store policies.
+product availability, wholesale/bulk orders, shipping, orders, returns,
+and other documented store policies.
 
 ## Can Idol AI find products?
 

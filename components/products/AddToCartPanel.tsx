@@ -53,7 +53,7 @@ export default function AddToCartPanel({ product }: { product: Product }) {
         onClick={handleAdd}
         className="flex-1 rounded-full bg-fairy-pink-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-fairy-pink-600"
       >
-        {added ? "Added to Cart ✓" : product.stockStatus === "Preorder" ? "Preorder Now" : "Add to Cart"}
+        {added ? "Added to Cart ✓" : "Add to Cart"}
       </button>
     </div>
   );

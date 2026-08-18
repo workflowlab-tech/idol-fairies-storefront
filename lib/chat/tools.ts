@@ -6,7 +6,7 @@ import { PRODUCT_CATEGORIES, type ProductCategory, type StockStatus } from "@/ty
 
 const KNOWLEDGE_CATEGORIES = [
   "shipping",
-  "preorder",
+  "wholesale",
   "order-processing",
   "cancellation",
   "returns",
@@ -21,7 +21,7 @@ const KNOWLEDGE_CATEGORIES = [
  * Tool declarations Gemini can call. `search_products` hits Supabase
  * directly with exact filters — it is the ONLY path for stock/price/release
  * facts, per the brief ("do NOT use vector search for exact product
- * facts"). `search_policy` is the ONLY path for shipping/preorder/returns/
+ * facts"). `search_policy` is the ONLY path for shipping/wholesale/returns/
  * etc. questions, via embedding + pgvector similarity search. The model
  * decides which (or both) to call based on the system prompt's routing
  * rules; this structure also leaves room to add more tools later (order
@@ -32,7 +32,7 @@ export const CHAT_TOOLS: FunctionDeclaration[] = [
   {
     name: "search_products",
     description:
-      "Look up real products from the Idol Fairies catalog by exact filters (artist, category, availability, price range, or a name/keyword search). Use this for ANY question about what's in stock, prices, preorder status, sold-out status, or release dates. Never answer those questions from memory.",
+      "Look up real products from the Idol Fairies catalog by exact filters (artist, category, availability, price range, or a name/keyword search). Use this for ANY question about what's in stock, prices, availability status, sold-out status, or release dates. Never answer those questions from memory.",
     parametersJsonSchema: {
       type: "object",
       properties: {
@@ -40,7 +40,7 @@ export const CHAT_TOOLS: FunctionDeclaration[] = [
         category: { type: "string", enum: PRODUCT_CATEGORIES, description: "Product category to filter by." },
         availability: {
           type: "string",
-          enum: ["In Stock", "Preorder", "Sold Out"],
+          enum: ["In Stock", "Sold Out"],
           description: "Stock status to filter by.",
         },
         query: { type: "string", description: "Free-text keyword to match against the product name/description." },
@@ -53,7 +53,7 @@ export const CHAT_TOOLS: FunctionDeclaration[] = [
   {
     name: "search_policy",
     description:
-      "Search the Idol Fairies policy knowledge base (shipping, preorder rules, cancellation, returns/refunds, damaged or missing items, payment, address changes, customs, general FAQs). Use this for ANY question about store policy or procedures. Never answer those questions from memory — only from what this tool returns.",
+      "Search the Idol Fairies policy knowledge base (shipping, wholesale & bulk orders, cancellation, returns/refunds, damaged or missing items, payment, address changes, customs, general FAQs). Use this for ANY question about store policy or procedures. Never answer those questions from memory — only from what this tool returns.",
     parametersJsonSchema: {
       type: "object",
       properties: {
@@ -74,6 +74,7 @@ export type ProductToolResult = {
     category: string;
     version: string | null;
     pricePHP: string;
+    priceValuePHP: number;
     stockStatus: StockStatus;
     releaseDate: string | null;
   }>;
@@ -105,6 +106,7 @@ async function runSearchProducts(args: Record<string, unknown>): Promise<Product
       category: p.category,
       version: p.version,
       pricePHP: formatPHP(p.pricePHP),
+      priceValuePHP: p.pricePHP,
       stockStatus: p.stockStatus,
       releaseDate: p.releaseDate,
     })),

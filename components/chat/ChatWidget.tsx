@@ -2,21 +2,22 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { sendChatMessage } from "@/lib/chat/client";
 import { formatPHP } from "@/lib/products/format";
-import type { Product } from "@/types/product";
 import {
   MAX_HISTORY_MESSAGES,
   MAX_MESSAGE_LENGTH,
   type ChatHistoryMessage,
+  type ChatProductSummary,
 } from "@/types/chat";
 
 type Message = {
   id: number;
   role: "assistant" | "user";
   text: string;
-  productSlugs?: string[];
+  products?: ChatProductSummary[];
 };
 
 type RobotState = "idle" | "thinking" | "searching" | "success";
@@ -57,26 +58,27 @@ function RobotImage({
 const WELCOME: Message = {
   id: 1,
   role: "assistant",
-  text: "Hi! I'm Idol AI ✨ Ask me about albums, light sticks, preorders, shipping, or store policies — in whatever language you're comfortable with.",
+  text: "Hi! I'm Idol AI ✨ Ask me about albums, light sticks, availability, shipping, or store policies — in whatever language you're comfortable with.",
 };
 
 const PROMPTS = [
   "Do you have Stray Kids albums?",
-  "What items are on preorder?",
+  "Do you offer wholesale pricing?",
   "How long does shipping take?",
   "Any light sticks under ₱3,000?",
   "商品は日本に発送できますか？",
-  "先注文を取り消すことはできますか？",
+  "返品はできますか？",
 ];
 
 const SPEECH_BUBBLES = [
   "Need help? ✨",
   "Looking for your bias?",
-  "Ask me about preorders!",
+  "Ask about wholesale orders!",
   "Need a recommendation?",
 ];
 
-export default function ChatWidget({ products }: { products: Product[] }) {
+export default function ChatWidget() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput] = useState("");
@@ -86,22 +88,70 @@ export default function ChatWidget({ products }: { products: Product[] }) {
   const [bubbleIndex, setBubbleIndex] = useState(0);
   const [robotState, setRobotState] = useState<RobotState>("idle");
   const [ambientRobotState, setAmbientRobotState] = useState<RobotState>("idle");
+  const [mobileScrolling, setMobileScrolling] = useState(false);
+  const hideMobileLauncher =
+    pathname.startsWith("/products/") ||
+    pathname === "/cart" ||
+    pathname.startsWith("/checkout");
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
+  const shouldRestoreFocusRef = useRef(false);
 
   // TypeScript/React fix:
   // useRef requires an initial value with the current project typings.
   const bubbleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollIdleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const openChat = useCallback(() => {
+    restoreFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : launcherRef.current;
+    setShowBubble(false);
+    setOpen(true);
+  }, []);
+
+  const closeChat = useCallback(() => {
+    shouldRestoreFocusRef.current = true;
+    setOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (open || !shouldRestoreFocusRef.current) return;
+    shouldRestoreFocusRef.current = false;
+    const previous = restoreFocusRef.current;
+    const target = previous?.isConnected ? previous : launcherRef.current;
+    target?.focus();
+  }, [open]);
 
   useEffect(() => {
     return () => {
       if (searchingTimeoutRef.current) clearTimeout(searchingTimeoutRef.current);
       if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+      if (scrollIdleTimeoutRef.current) clearTimeout(scrollIdleTimeoutRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    function hideLauncherWhileScrolling() {
+      if (open || !window.matchMedia("(max-width: 639px)").matches) return;
+
+      setMobileScrolling(true);
+      if (scrollIdleTimeoutRef.current) clearTimeout(scrollIdleTimeoutRef.current);
+      scrollIdleTimeoutRef.current = setTimeout(() => {
+        setMobileScrolling(false);
+        scrollIdleTimeoutRef.current = null;
+      }, 900);
+    }
+
+    window.addEventListener("scroll", hideLauncherWhileScrolling, { passive: true });
+    return () => window.removeEventListener("scroll", hideLauncherWhileScrolling);
+  }, [open]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -116,14 +166,8 @@ export default function ChatWidget({ products }: { products: Product[] }) {
 
   // Speech bubble timing: show after 2 seconds, hide after 6 seconds
   useEffect(() => {
-    if (open) {
-      if (bubbleTimeoutRef.current) {
-        clearTimeout(bubbleTimeoutRef.current);
-      }
-
-      setShowBubble(false);
-      return;
-    }
+    const desktopLauncher = window.matchMedia("(min-width: 640px)");
+    if (open || !desktopLauncher.matches) return;
 
     const showTimer = setTimeout(() => {
       setShowBubble(true);
@@ -140,10 +184,17 @@ export default function ChatWidget({ products }: { products: Product[] }) {
 
     bubbleTimeoutRef.current = showTimer;
 
+    function hideBubbleOnMobile(event: MediaQueryListEvent) {
+      if (!event.matches) setShowBubble(false);
+    }
+
+    desktopLauncher.addEventListener("change", hideBubbleOnMobile);
+
     return () => {
       if (bubbleTimeoutRef.current) {
         clearTimeout(bubbleTimeoutRef.current);
       }
+      desktopLauncher.removeEventListener("change", hideBubbleOnMobile);
     };
   }, [open]);
 
@@ -155,11 +206,7 @@ export default function ChatWidget({ products }: { products: Product[] }) {
 
       setProductContext(custom.detail?.productContext);
       setRobotState("idle");
-      setOpen(true);
-
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 50);
+      openChat();
     }
 
     window.addEventListener("open-idol-ai", handler);
@@ -167,7 +214,42 @@ export default function ChatWidget({ products }: { products: Product[] }) {
     return () => {
       window.removeEventListener("open-idol-ai", handler);
     };
-  }, []);
+  }, [openChat]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+
+    function handleDialogKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeChat();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleDialogKeyDown);
+    return () => document.removeEventListener("keydown", handleDialogKeyDown);
+  }, [closeChat, open]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -245,8 +327,12 @@ export default function ChatWidget({ products }: { products: Product[] }) {
       {/* Chat Panel - Open State */}
       {open && (
         <section
+          id="idol-ai-dialog"
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="idol-ai-dialog-title"
           className="fixed bottom-24 right-4 z-50 flex h-[min(32rem,70vh)] w-[min(23rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border border-fairy-pink-200 bg-white shadow-2xl"
-          aria-label="Idol AI chat assistant"
         >
           <header className="flex items-center gap-3 bg-fairy-ink px-4 py-3 text-fairy-cream">
             <span className="relative block h-10 w-10 shrink-0">
@@ -261,14 +347,14 @@ export default function ChatWidget({ products }: { products: Product[] }) {
             </span>
 
             <div className="min-w-0 flex-1">
-              <strong className="text-sm">Idol AI</strong>
+              <strong id="idol-ai-dialog-title" className="text-sm">Idol AI</strong>
               <p className="truncate text-xs text-fairy-cream/70">
                 Multilingual shopping assistant
               </p>
             </div>
 
             <button
-              onClick={() => setOpen(false)}
+              onClick={closeChat}
               aria-label="Close chat"
               className="rounded-full p-1 text-fairy-cream/70 hover:bg-white/10 hover:text-white"
             >
@@ -312,21 +398,15 @@ export default function ChatWidget({ products }: { products: Product[] }) {
                     {message.text}
                   </p>
 
-                  {message.productSlugs &&
-                    message.productSlugs.length > 0 && (
+                  {message.products &&
+                    message.products.length > 0 && (
                       <div className="mt-2 flex flex-col gap-1.5">
-                        {message.productSlugs.map((slug) => {
-                          const product = products.find(
-                            (item) => item.slug === slug
-                          );
-
-                          if (!product) return null;
-
+                        {message.products.map((product) => {
                           return (
                             <Link
-                              key={slug}
-                              href={`/products/${slug}`}
-                              onClick={() => setOpen(false)}
+                              key={product.slug}
+                              href={`/products/${product.slug}`}
+                              onClick={closeChat}
                               className="rounded-xl border border-fairy-pink-200 bg-white px-3 py-2 text-xs transition hover:border-fairy-pink-400"
                             >
                               <span className="block text-fairy-blue-600">
@@ -426,9 +506,9 @@ export default function ChatWidget({ products }: { products: Product[] }) {
 
       {/* Floating Mascot - Closed State */}
       {!open && (
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className={`chatbot-launcher-position fixed z-50 transition-opacity duration-200 ${hideMobileLauncher || mobileScrolling ? "hidden sm:block" : ""}`}>
           {showBubble && (
-            <div className="absolute bottom-32 right-0 animate-in fade-in duration-300 md:bottom-48">
+            <div className="absolute bottom-32 right-0 hidden animate-in fade-in duration-300 sm:block md:bottom-48">
               <div className="relative mb-2 w-48 rounded-2xl rounded-br-none border border-fairy-pink-200 bg-white px-3 py-2 text-xs text-fairy-ink shadow-lg">
                 {SPEECH_BUBBLES[bubbleIndex]}
 
@@ -438,16 +518,18 @@ export default function ChatWidget({ products }: { products: Product[] }) {
           )}
 
           <button
-            onClick={() => setOpen(true)}
+            ref={launcherRef}
+            onClick={openChat}
             aria-label="Open Idol AI assistant"
             aria-expanded={open}
+            aria-controls="idol-ai-dialog"
             className="chatbot-mascot-button flex items-center justify-center drop-shadow-lg"
           >
-            <span className="relative block h-24 w-24 md:h-40 md:w-40">
+            <span className="relative block h-16 w-16 sm:h-24 sm:w-24 md:h-40 md:w-40">
               <RobotImage
                 state={ambientRobotState}
                 alt="Idol AI"
-                sizes="(min-width: 768px) 160px, 96px"
+                sizes="(min-width: 768px) 160px, (min-width: 640px) 96px, 64px"
                 priority={ambientRobotState === "idle"}
               />
             </span>

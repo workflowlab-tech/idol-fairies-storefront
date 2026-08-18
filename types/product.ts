@@ -1,6 +1,7 @@
 /** Raw row shape from the Supabase `products` table (read-only, single source of truth). */
 export type ProductRow = {
   id: number;
+  sku: string | null;
   slug: string;
   artist: string;
   product_name: string;
@@ -9,7 +10,6 @@ export type ProductRow = {
   price_php: number;
   original_price_php: number | null;
   stock_status: string;
-  preorder_status: string;
   release_date: string | null;
   short_description: string | null;
   tags: string[] | null;
@@ -21,9 +21,10 @@ export type ProductRow = {
   source_price: number | null;
   dispatch_note: string | null;
   created_at: string;
+  is_active: boolean;
 };
 
-export type StockStatus = "In Stock" | "Sold Out" | "Preorder";
+export type StockStatus = "In Stock" | "Sold Out";
 
 /** Categories as stored in the DB. */
 export type ProductCategory =
@@ -40,6 +41,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = ["Album", "Light Stick", "M
 /** App-facing camelCase Product, mapped from ProductRow in lib/products/queries.ts. */
 export type Product = {
   id: number;
+  sku: string | null;
   slug: string;
   artist: string;
   productName: string;
@@ -48,7 +50,6 @@ export type Product = {
   pricePHP: number;
   originalPricePHP: number | null;
   stockStatus: StockStatus;
-  preorderStatus: string;
   releaseDate: string | null;
   shortDescription: string | null;
   tags: string[];
@@ -58,13 +59,14 @@ export type Product = {
   imageUrl: string | null;
   sourceUrl: string | null;
   dispatchNote: string | null;
+  isActive: boolean;
 };
 
 export type ProductFilters = {
   artist?: string;
   category?: ProductCategory | ProductCategory[];
   availability?: StockStatus;
-  preorderOnly?: boolean;
+  newRelease?: boolean;
   minPrice?: number;
   maxPrice?: number;
   query?: string;

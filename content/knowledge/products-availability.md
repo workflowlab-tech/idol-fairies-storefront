@@ -3,15 +3,14 @@ category: products
 title: Products and Availability
 ---
 
-## What does In Stock mean?
+## What availability statuses do products have?
 
-In Stock means the product is currently listed as available for
-purchase.
+Every product is listed as either Available or Sold Out — there is no
+other status.
 
-## What does Preorder mean?
+## What does Available mean?
 
-Preorder means the product is being offered before its regular
-availability or release according to the product listing.
+Available means the product is currently listed and ready for purchase.
 
 ## What does Sold Out mean?
 

@@ -7,13 +7,13 @@ import type { FaqGroup, FaqItem } from "@/types/faq";
 const KNOWLEDGE_DIR = join(process.cwd(), "content", "knowledge");
 const GROUP_ORDER = [
   "shipping",
-  "preorder",
+  "products",
   "order-processing",
   "returns",
   "damaged-missing",
   "payment",
   "address-changes",
-  "products",
+  "wholesale",
   "idol-ai",
   "faq",
 ];

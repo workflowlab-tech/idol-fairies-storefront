@@ -12,7 +12,7 @@ export default function FaqPage() {
           Frequently Asked Questions
         </h1>
         <p className="mt-1 text-sm text-fairy-ink/60">
-          Shipping, preorders, cancellations, returns, and more — the same policies Idol AI answers from.
+          Shipping, availability, wholesale orders, returns, and more — the same policies Idol AI answers from.
         </p>
       </header>
       <FaqAccordion groups={faqGroups} />

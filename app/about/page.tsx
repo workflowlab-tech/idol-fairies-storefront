@@ -9,12 +9,12 @@ const REASONS = [
     body: "We carefully source official albums, merchandise, and collectibles from trusted suppliers so fans can shop with confidence.",
   },
   {
-    title: "Preorders Made Easier",
-    body: "Release dates, versions, inclusions, and preorder timelines can get confusing. We make important preorder information easier to find and understand.",
+    title: "Clear Product Availability",
+    body: "Every listing shows a straightforward Available or Sold Out status, sourced straight from our catalog — never guesswork.",
   },
   {
     title: "Meet Idol AI",
-    body: "Our floating Idol AI assistant can help you discover products, check product information, and answer questions about preorders, shipping, and store policies.",
+    body: "Our floating Idol AI assistant can help you discover products, check product information, and answer questions about availability, shipping, and store policies.",
   },
   {
     title: "Made for K-pop Fans",
@@ -39,8 +39,7 @@ export default function AboutPage() {
           <br />
           <br />
           From albums and light sticks to photobooks and collectibles, we bring together carefully sourced K-pop
-          merchandise with clear product information, preorder updates, and helpful support throughout your shopping
-          journey.
+          merchandise with clear product information and helpful support throughout your shopping journey.
         </p>
       </div>
 

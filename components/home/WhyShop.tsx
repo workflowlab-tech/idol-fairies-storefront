@@ -1,5 +1,5 @@
 const POINTS = [
-  { title: "Live catalog", body: "Stock, price, and preorder status come straight from our database — never guessed." },
+  { title: "Live catalog", body: "Stock and price come straight from our database — never guessed." },
   {
     title: "Official product sourcing",
     body: "Products listed as official merchandise are sourced from established K-pop suppliers and retailers.",
@@ -10,8 +10,8 @@ const POINTS = [
     body: "Available destinations, delivery methods, and charges are confirmed through the store's current checkout options.",
   },
   {
-    title: "Clear preorder details",
-    body: "Timing depends on release, supplier availability, arrival, and processing. Check each product for current details.",
+    title: "Wholesale & bulk pricing",
+    body: "Ordering for a shop, fan group, or event? We offer reseller and bulk pricing — reach out through our Wholesale inquiry form.",
   },
 ];
 

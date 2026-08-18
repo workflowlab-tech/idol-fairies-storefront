@@ -1,12 +1,17 @@
 import type { ProductCategory, ProductFilters, StockStatus } from "@/types/product";
 
 export type SearchParams = Record<string, string | string[] | undefined>;
+export type ProductSort = "newest" | "price-asc" | "price-desc" | "artist-asc";
+
+export const PRODUCT_PAGE_SIZE = 24;
+
+const VALID_SORTS: ProductSort[] = ["newest", "price-asc", "price-desc", "artist-asc"];
 
 function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-const VALID_STOCK_STATUS: StockStatus[] = ["In Stock", "Preorder", "Sold Out"];
+const VALID_STOCK_STATUS: StockStatus[] = ["In Stock", "Sold Out"];
 
 /** Builds ProductFilters from a Next.js page's `searchParams`. */
 export function filtersFromSearchParams(searchParams: SearchParams): ProductFilters {
@@ -33,4 +38,13 @@ export function filtersFromSearchParams(searchParams: SearchParams): ProductFilt
   if (maxPrice && !Number.isNaN(Number(maxPrice))) filters.maxPrice = Number(maxPrice);
 
   return filters;
+}
+
+export function catalogOptionsFromSearchParams(searchParams: SearchParams) {
+  const pageValue = Number(first(searchParams.page));
+  const page = Number.isInteger(pageValue) && pageValue > 0 ? pageValue : 1;
+  const sortValue = first(searchParams.sort) as ProductSort | undefined;
+  const sort = sortValue && VALID_SORTS.includes(sortValue) ? sortValue : "newest";
+
+  return { page, pageSize: PRODUCT_PAGE_SIZE, sort };
 }

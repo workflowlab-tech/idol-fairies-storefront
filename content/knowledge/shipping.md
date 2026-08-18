@@ -17,8 +17,6 @@ applicable shipping charge should be confirmed during checkout.
 ## When will my order ship?
 
 Processing and dispatch depend on product availability and order status.
-Preorder products may require additional time because they depend on
-release and supplier schedules.
 
 ## How do I track my order?
 

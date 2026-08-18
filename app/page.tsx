@@ -3,15 +3,15 @@ import CategoryGrid from "@/components/home/CategoryGrid";
 import ProductSlideshow from "@/components/home/ProductSlideshow";
 import WhyShop from "@/components/home/WhyShop";
 import FaqPreview from "@/components/home/FaqPreview";
-import { getHeroCarouselProducts, getNewReleases, getFeaturedProducts, getBestsellers, getPreorders } from "@/lib/products/queries";
+import WholesaleSection from "@/components/home/WholesaleSection";
+import { getHeroCarouselProducts, getNewReleases, getFeaturedProducts, getBestsellers } from "@/lib/products/queries";
 
 export default async function HomePage() {
-  const [heroProducts, newReleases, featured, bestsellers, preorders] = await Promise.all([
+  const [heroProducts, newReleases, featured, bestsellers] = await Promise.all([
     getHeroCarouselProducts(8),
     getNewReleases(12),
     getFeaturedProducts(12),
     getBestsellers(12),
-    getPreorders(12),
   ]);
 
   return (
@@ -24,19 +24,19 @@ export default async function HomePage() {
         viewAllHref="/new-releases"
         products={newReleases}
       />
-      {/* Featured/Bestsellers only render when the catalog actually flags items that way —
-          no products currently have featured=true or bestseller=true, so these are silently
-          skipped rather than showing fabricated picks. */}
-      <ProductSlideshow title="Featured Picks" viewAllHref="/shop" products={featured} />
       <ProductSlideshow
-        title="Preorder Spotlight"
-        subtitle="Reserve these before they arrive"
-        viewAllHref="/preorders"
-        products={preorders}
+        title="Featured Products"
+        subtitle="A pick of what's available right now"
+        viewAllHref="/shop"
+        products={featured}
       />
+      {/* Bestsellers only renders when the catalog actually flags items that way —
+          no products currently have bestseller=true, so it's silently skipped
+          rather than showing fabricated picks. */}
       <ProductSlideshow title="Bestsellers" viewAllHref="/shop" products={bestsellers} />
       <WhyShop />
       <FaqPreview />
+      <WholesaleSection />
     </>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import ProductImage from "@/components/products/ProductImage";
+import { supabase } from "@/lib/supabase/client";
 
 const CATEGORIES = [
   {
@@ -43,19 +43,9 @@ export default function CategoryGrid() {
 
   useEffect(() => {
     const loadImages = async () => {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-      if (!supabaseUrl || !supabaseKey) {
-        console.error("Supabase environment variables are missing.");
-        return;
-      }
-
-      const supabase = createClient(supabaseUrl, supabaseKey);
-
       const images: Record<string, string> = {};
 
-      const pickRandomImage = (rows: ProductImageRow[] | null) => {
+      const pickFirstImage = (rows: ProductImageRow[] | null) => {
         const validRows =
           rows?.filter(
             (row): row is { image_url: string } =>
@@ -65,8 +55,7 @@ export default function CategoryGrid() {
 
         if (validRows.length === 0) return null;
 
-        const randomIndex = Math.floor(Math.random() * validRows.length);
-        return validRows[randomIndex].image_url;
+        return validRows[0].image_url;
       };
 
       for (const cat of CATEGORIES) {
@@ -77,7 +66,9 @@ export default function CategoryGrid() {
           .eq("category", cat.category)
           .eq("stock_status", "In Stock")
           .not("image_url", "is", null)
-          .limit(10);
+          .order("created_at", { ascending: false })
+          .order("id", { ascending: false })
+          .limit(1);
 
         if (availableError) {
           console.error(
@@ -86,44 +77,23 @@ export default function CategoryGrid() {
           );
         }
 
-        const availableImage = pickRandomImage(available);
+        const availableImage = pickFirstImage(available);
 
         if (availableImage) {
           images[cat.category] = availableImage;
           continue;
         }
 
-        // 2. Fall back to Preorder products.
-        const { data: preorder, error: preorderError } = await supabase
-          .from("products")
-          .select("image_url")
-          .eq("category", cat.category)
-          .eq("stock_status", "Preorder")
-          .not("image_url", "is", null)
-          .limit(10);
-
-        if (preorderError) {
-          console.error(
-            `Failed to load preorder ${cat.category} images:`,
-            preorderError
-          );
-        }
-
-        const preorderImage = pickRandomImage(preorder);
-
-        if (preorderImage) {
-          images[cat.category] = preorderImage;
-          continue;
-        }
-
-        // 3. Last fallback: Sold Out products with a real image.
+        // 2. Last fallback: Sold Out products with a real image.
         const { data: soldOut, error: soldOutError } = await supabase
           .from("products")
           .select("image_url")
           .eq("category", cat.category)
           .eq("stock_status", "Sold Out")
           .not("image_url", "is", null)
-          .limit(10);
+          .order("created_at", { ascending: false })
+          .order("id", { ascending: false })
+          .limit(1);
 
         if (soldOutError) {
           console.error(
@@ -132,7 +102,7 @@ export default function CategoryGrid() {
           );
         }
 
-        const soldOutImage = pickRandomImage(soldOut);
+        const soldOutImage = pickFirstImage(soldOut);
 
         if (soldOutImage) {
           images[cat.category] = soldOutImage;
@@ -158,8 +128,9 @@ export default function CategoryGrid() {
             href={cat.href}
             className="group relative aspect-[4/5] overflow-hidden rounded-2xl"
           >
-            <Image
+            <ProductImage
               src={categoryImages[cat.category] || cat.placeholder}
+              fallbackSrc={cat.placeholder}
               alt={cat.label}
               fill
               sizes="(min-width: 1024px) 22vw, 45vw"

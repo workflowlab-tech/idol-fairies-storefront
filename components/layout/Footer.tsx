@@ -14,6 +14,7 @@ const HELP_LINKS = [
   { href: "/about", label: "About / Why Idol Fairies" },
   { href: "/faq#shipping", label: "Shipping" },
   { href: "/faq#returns", label: "Returns & Refunds" },
+  { href: "/#wholesale", label: "Wholesale & Bulk Orders" },
 ];
 
 export default function Footer() {
@@ -63,7 +64,7 @@ export default function Footer() {
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-fairy-cream/60">Idol AI</h3>
           <p className="mt-3 text-sm text-fairy-cream/80">
-            Need help finding a product or have a question about preorders, shipping, or store policies? Ask Idol AI anytime — it can help in your language.
+            Need help finding a product or have a question about availability, shipping, or store policies? Ask Idol AI anytime — it can help in your language.
           </p>
         </div>
       </div>

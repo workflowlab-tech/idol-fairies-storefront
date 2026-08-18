@@ -15,8 +15,8 @@ store as soon as possible if a change is needed.
 
 ## Can product availability change during ordering?
 
-Yes. Availability can change, particularly for limited, preorder, or
-high-demand merchandise.
+Yes. Availability can change, particularly for limited or high-demand
+merchandise.
 
 ## What happens if an ordered product cannot be fulfilled?
 
