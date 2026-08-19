@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCart } from "@/lib/cart/context";
 import { formatPHP } from "@/lib/products/format";
+import { getProductPlaceholderImage } from "@/lib/products/images";
+import ProductImage from "@/components/products/ProductImage";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, subtotalPHP, clear } = useCart();
@@ -28,7 +30,21 @@ export default function CartPage() {
 
       <ul className="mt-6 divide-y divide-fairy-pink-100 rounded-2xl border border-fairy-pink-100 bg-white">
         {items.map((item) => (
-          <li key={item.slug} className="flex items-center gap-4 p-4">
+          <li key={item.slug} className="grid grid-cols-[5rem_minmax(0,1fr)_auto] items-center gap-3 p-4 sm:flex sm:gap-4">
+            <Link
+              href={`/products/${item.slug}`}
+              className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-fairy-pink-50"
+              aria-label={`View ${item.productName}`}
+            >
+              <ProductImage
+                src={item.imageUrl || getProductPlaceholderImage(item.category)}
+                fallbackSrc={getProductPlaceholderImage(item.category)}
+                alt={`${item.artist} ${item.productName}`}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </Link>
             <div className="min-w-0 flex-1">
               <Link href={`/products/${item.slug}`} className="block truncate text-sm font-semibold text-fairy-ink hover:text-fairy-pink-600">
                 {item.productName}
@@ -37,10 +53,13 @@ export default function CartPage() {
                 {item.artist}
                 {item.version ? ` · ${item.version}` : ""}
               </p>
-              <p className="mt-1 text-sm font-semibold text-fairy-ink">{formatPHP(item.pricePHP)}</p>
+              <p className="mt-1 text-xs text-fairy-ink/50">Unit price: {formatPHP(item.pricePHP)}</p>
+              <p className="text-sm font-semibold text-fairy-ink">
+                Line total: {formatPHP(item.pricePHP * item.quantity)}
+              </p>
             </div>
 
-            <div className="flex items-center rounded-full border border-fairy-pink-200">
+            <div className="col-start-2 row-start-2 flex w-fit items-center rounded-full border border-fairy-pink-200 sm:col-auto sm:row-auto">
               <button
                 aria-label={`Decrease quantity of ${item.productName}`}
                 onClick={() => updateQuantity(item.slug, item.quantity - 1)}
@@ -61,7 +80,7 @@ export default function CartPage() {
             <button
               aria-label={`Remove ${item.productName} from cart`}
               onClick={() => removeItem(item.slug)}
-              className="text-fairy-ink/40 hover:text-fairy-danger"
+              className="col-start-3 row-start-1 self-start text-fairy-ink/40 hover:text-fairy-danger sm:col-auto sm:row-auto sm:self-auto"
             >
               ✕
             </button>
@@ -79,13 +98,20 @@ export default function CartPage() {
         </button>
       </div>
 
-      <button
-        disabled
-        title="Checkout coming soon."
-        className="mt-4 w-full cursor-not-allowed rounded-full bg-fairy-ink/10 px-6 py-3 text-sm font-semibold text-fairy-ink/40"
-      >
-        Checkout (coming soon)
-      </button>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Link
+          href="/shop"
+          className="block rounded-full border border-fairy-pink-300 px-6 py-3 text-center text-sm font-semibold text-fairy-pink-700 transition hover:bg-fairy-pink-50"
+        >
+          Continue shopping
+        </Link>
+        <Link
+          href="/checkout"
+          className="block rounded-full bg-fairy-pink-500 px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-fairy-pink-600"
+        >
+          Continue to Checkout
+        </Link>
+      </div>
     </div>
   );
 }
